@@ -43,7 +43,7 @@ public class PacienteController {
         return ResponseEntity.ok(pacienteActualizado);
     }
 
-    // DELETE /api/citas/{id}
+    // DELETE /api/pacientes/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         service.delete(id);
