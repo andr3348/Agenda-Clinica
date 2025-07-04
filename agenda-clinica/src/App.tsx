@@ -7,15 +7,37 @@ import { createDragAndDropPlugin } from '@schedule-x/drag-and-drop';
 import { createResizePlugin } from '@schedule-x/resize';
 import { useEffect, useState } from 'react';
 import { getCitas, type Cita } from './api/citaApi';
+import TimeGridEvent from './components/time-grid-event.tsx';
 
 function App() {
+  const customComponents = {
+    timeGridEvent: TimeGridEvent
+  };
+
   const [loading, setLoading] = useState(true);
+  const [events, setEvents] = useState<CalendarEventExternal[]>([
+    {
+      id: 20,
+      title: 'Test event',
+      start: '2025-07-04 02:00',
+      end: '2025-07-04 03:00',
+      colorHex: '#339333'
+    },
+    {
+      id: 25,
+      title: 'Another test',
+      start: '2025-07-04 05:00',
+      end: '2025-07-04 05:30',
+      colorHex: '#87CEEB'
+    }
+  ]);
 
   const calendar = useCalendarApp({
     views: [
       createViewWeek(),
       createViewMonthGrid()
     ],
+    events: events, // Pass events directly
     selectedDate: new Date().toISOString().split('T')[0],
     plugins: [
       createEventModalPlugin(),
@@ -29,24 +51,21 @@ function App() {
       try {
         const citas: Cita[] = await getCitas();
 
-        citas.forEach((cita) => {
-          const event: CalendarEventExternal = {
-            id: cita.idCita.toString(),
-            title: `${cita.paciente.nombre} - ${cita.motivo}`,
-            start: cita.fechaInicio,
-            end: cita.fechaFin,
-            description: `
-                Doctor: ${cita.doctor.nombre}\n
-                Estado: ${cita.estado.nombreEstado}\n
-                Encargado: ${cita.encargado ? cita.encargado.nombre : 'No asignado'}`,
-            backgroundColor: 'Green'
-          };
+        const newEvents: CalendarEventExternal[] = citas.map((cita) => ({
+          id: cita.idCita.toString(),
+          title: `${cita.paciente.nombre} - ${cita.motivo}`,
+          start: cita.fechaInicio,
+          end: cita.fechaFin,
+          description: `
+              Doctor: ${cita.doctor.nombre}\n
+              Estado: ${cita.estado.nombreEstado}\n
+              Encargado: ${cita.encargado ? cita.encargado.nombre : 'No asignado'}`,
+          colorHex: cita.estado.colorHex
+        }));
 
-          if (calendar) {
-            calendar?.events.add(event);
-            //calendar.setTheme('dark');
-          }
-        });
+        // Update events state instead of adding to calendar directly
+        setEvents(prevEvents => [...prevEvents, ...newEvents]);
+        
       } catch (error) {
         console.error(error);
       } finally {
@@ -55,17 +74,26 @@ function App() {
     };
 
     fetchData();
+  }, []);
 
-  }, [calendar]);
+  // Recreate calendar when events change
+  useEffect(() => {
+    if (calendar && events.length > 0) {
+      // Clear existing events and add new ones
+      calendar.events.set(events);
+    }
+  }, [events, calendar]);
 
   if (loading) return <p>Cargando agenda...</p>;
 
   return (
     <>
       <div>
-        <ScheduleXCalendar calendarApp={calendar} />
+        <ScheduleXCalendar
+          calendarApp={calendar}
+          customComponents={customComponents} 
+        />
       </div>
-
     </>
   )
 }
