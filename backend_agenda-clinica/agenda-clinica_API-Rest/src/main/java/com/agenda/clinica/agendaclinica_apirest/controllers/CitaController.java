@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/citas")
+@CrossOrigin(origins = "http://localhost:5173")
 public class CitaController {
 
     private final CitaService service;
