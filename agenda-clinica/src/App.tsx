@@ -1,6 +1,6 @@
 import './App.css'
 import { ScheduleXCalendar, useCalendarApp } from '@schedule-x/react'
-import { createViewWeek, createViewMonthGrid, type CalendarEventExternal } from '@schedule-x/calendar';
+import {  createViewDay ,createViewWeek, createViewMonthGrid, type CalendarEventExternal } from '@schedule-x/calendar';
 import '@schedule-x/theme-default/dist/calendar.css';
 import { createEventModalPlugin } from '@schedule-x/event-modal';
 import { createDragAndDropPlugin } from '@schedule-x/drag-and-drop';
@@ -17,8 +17,15 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState<CalendarEventExternal[]>([]);
 
+  /*const doctors = [
+    { id: 'doctor1', label: 'Dr. Lopez' },
+    { id: 'doctor2', label: 'Dra. Garcia' }
+  ];*/
+
+
   const calendar = useCalendarApp({
     views: [
+      createViewDay(),
       createViewWeek(),
       createViewMonthGrid()
     ],
@@ -29,6 +36,7 @@ function App() {
       createDragAndDropPlugin(),
       createResizePlugin()
     ],
+    locale: 'es-ES'
   });
 
   useEffect(() => {
