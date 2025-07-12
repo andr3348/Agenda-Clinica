@@ -1,0 +1,59 @@
+.custom-modal__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.custom-modal__content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.custom-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.custom-modal__header h2 {
+  margin: 0;
+}
+
+.custom-modal__close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.custom-modal__body pre {
+  white-space: pre-wrap; /* a diferencia del modal por defecto, esto respeta los saltos de línea */
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.custom-modal__footer {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+  margin-top: 20px;
+  text-align: right;
+}
+
+button {
+  cursor: pointer;
+}

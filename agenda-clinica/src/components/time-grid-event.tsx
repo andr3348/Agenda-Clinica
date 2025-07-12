@@ -25,13 +25,13 @@ export default function TimeGridEvent({ calendarEvent }: props) {
     },[])
 
     return (
-    <div ref={ref} id='EventFrame' style={{ backgroundColor: calendarEvent.colorHex,
+    <div ref={ref} id='EventFrame' style={{ backgroundColor: calendarEvent.color,
                 width: '100%', height: '100%',
                 boxSizing: 'border-box',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
-                color: '#FFF',
+                color: `white`,
                 fontSize: '12px',
                 fontWeight: '500',
                 lineHeight: '1.3',

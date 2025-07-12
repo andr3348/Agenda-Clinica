@@ -38,3 +38,13 @@ export const saveCita = async (cita: Partial<Cita>): Promise<Cita> => {
     if (!response.ok) throw new Error("Error al crear cita");
     return await response.json();
 };
+
+export const updateCita = async (idCita: string, cita: Partial<Cita>): Promise<Cita> => {
+    const response = await fetch(`${API_URL}/citas/${idCita}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cita),
+    });
+    if (!response.ok) throw new Error("Error al modificar la cita");
+    return await response.json();
+}

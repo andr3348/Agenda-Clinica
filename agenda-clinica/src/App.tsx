@@ -2,26 +2,20 @@ import './App.css'
 import { ScheduleXCalendar, useCalendarApp } from '@schedule-x/react'
 import {  createViewDay ,createViewWeek, createViewMonthGrid, type CalendarEventExternal } from '@schedule-x/calendar';
 import '@schedule-x/theme-default/dist/calendar.css';
-import { createEventModalPlugin } from '@schedule-x/event-modal';
 import { createDragAndDropPlugin } from '@schedule-x/drag-and-drop';
 import { createResizePlugin } from '@schedule-x/resize';
 import { useEffect, useState } from 'react';
 import { getCitas, type Cita } from './api/citaApi';
+import EventFormModal from './components/EventFormModal.tsx';
 import TimeGridEvent from './components/time-grid-event.tsx';
 
+const customComponents = {
+  timeGridEvent: TimeGridEvent,
+};
+
 function App() {
-  const customComponents = {
-    timeGridEvent: TimeGridEvent
-  };
-
   const [loading, setLoading] = useState(true);
-  const [events, setEvents] = useState<CalendarEventExternal[]>([]);
-
-  /*const doctors = [
-    { id: 'doctor1', label: 'Dr. Lopez' },
-    { id: 'doctor2', label: 'Dra. Garcia' }
-  ];*/
-
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEventExternal | null>(null);
 
   const calendar = useCalendarApp({
     views: [
@@ -29,36 +23,42 @@ function App() {
       createViewWeek(),
       createViewMonthGrid()
     ],
-    events: events,
+    // Los eventos se cargarán de forma asíncrona, por lo que empezamos con un array vacío.
+    events: [],
     selectedDate: new Date().toISOString().split('T')[0],
     plugins: [
-      createEventModalPlugin(),
       createDragAndDropPlugin(),
       createResizePlugin()
     ],
-    locale: 'es-ES'
+    locale: 'es-ES',
+    // Define los calendarios para poder asignar colores a los eventos
+    calendars: {
+      confirmada: {
+        colorName: 'confirmada',
+        lightColors: {
+          main: '#4ade80', // verde
+          container: '#f0fdf4',
+          onContainer: '#166534'
+        },
+        darkColors: {
+          main: '#4ade80',
+          container: '#14532d',
+          onContainer: '#f0fdf4'
+        }
+      },
+      // Puedes añadir más calendarios para otros estados
+    }
+    ,
+    callbacks: {
+      onEventClick: (event) => {
+        setSelectedEvent(event);
+      }
+    }
   });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const testEvents: CalendarEventExternal[] = [
-          {
-          id: 20,
-          title: 'Test event',
-          start: '2025-07-04 02:00',
-          end: '2025-07-04 03:00',
-          colorHex: '#339333'
-          },
-          {
-          id: 25,
-          title: 'Another test',
-          start: '2025-07-04 05:00',
-          end: '2025-07-04 05:30',
-          colorHex: '#87CEEB'
-        }
-      ];
-
         const citas: Cita[] = await getCitas();
 
       const newEvents: CalendarEventExternal[] = citas.map((cita) => ({
@@ -66,15 +66,16 @@ function App() {
         title: `${cita.paciente.nombre} - ${cita.motivo}`,
         start: cita.fechaInicio.replace('T', ' ').slice(0, 16),
         end: cita.fechaFin.replace('T', ' ').slice(0, 16),
-        description: `
-              Doctor: ${cita.doctor.nombre}\n
-              Estado: ${cita.estado.nombreEstado}\n
-              Encargado: ${cita.encargado ? cita.encargado.nombre : 'No asignado'}`,
-        colorHex: cita.estado.colorHex
+        description: `Doctor: ${cita.doctor.nombre}\nEstado: ${cita.estado.nombreEstado}\nEncargado: ${cita.encargado ? cita.encargado.nombre : 'No asignado'}`,
+        color: cita.estado.colorHex,
+        calendarId: cita.idCita.toString()
       }));
 
+      // Para depuración: verifica que los eventos se están creando correctamente
+      console.log('Eventos para cargar:', newEvents);
 
-      setEvents([...testEvents, ...newEvents]);
+      // El calendar.events.set() es el método correcto para actualizar los eventos.
+      if (calendar) calendar.events.set(newEvents);
 
     } catch (error) {
       console.error(error);
@@ -84,13 +85,7 @@ function App() {
   };
 
   fetchData();
-}, []);
-
-useEffect(() => {
-  if (calendar && events.length > 0) {
-    calendar.events.set(events);
-  }
-}, [events, calendar]);
+}, [calendar]);
 
 if (loading) return <p>Cargando agenda...</p>;
 
@@ -101,6 +96,12 @@ return (
         calendarApp={calendar}
         customComponents={customComponents}
       />
+
+      {selectedEvent && (
+        <EventFormModal
+          event={selectedEvent}
+          onClose={() => setSelectedEvent(null)} />
+      )}
     </div>
   </>
 )
