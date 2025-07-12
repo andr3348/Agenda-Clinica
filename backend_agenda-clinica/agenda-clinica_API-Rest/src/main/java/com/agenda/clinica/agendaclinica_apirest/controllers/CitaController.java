@@ -44,6 +44,12 @@ public class CitaController {
         return ResponseEntity.ok(citaActualizada);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<Cita> patch(@PathVariable Integer id, @RequestBody Cita cita) {
+        Cita citaActualizada = service.patchCita(id, cita);
+        return ResponseEntity.ok(citaActualizada);
+    }
+
     // DELETE /api/citas/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {

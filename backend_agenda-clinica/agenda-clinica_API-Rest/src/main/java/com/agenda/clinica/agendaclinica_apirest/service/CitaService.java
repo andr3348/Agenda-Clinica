@@ -4,6 +4,7 @@ import com.agenda.clinica.agendaclinica_apirest.models.Cita;
 import com.agenda.clinica.agendaclinica_apirest.repository.CitaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -42,5 +43,32 @@ public class CitaService {
                     HttpStatus.NOT_FOUND,"Cita no econtrada con el ID: "+id);
         }
         repository.deleteById(id);
+    }
+
+    @Transactional
+    public Cita patchCita(Integer id, Cita cita) {
+        Cita citaExistente = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Cita no encontrada con el ID: "+id));
+        if (cita.getFechaInicio() != null) {
+            citaExistente.setFechaInicio(cita.getFechaInicio());
+        }
+        if (cita.getFechaFin() != null) {
+            citaExistente.setFechaFin(cita.getFechaFin());
+        }
+        if (cita.getMotivo() != null) {
+            citaExistente.setMotivo(cita.getMotivo());
+        }
+        if (cita.getEstado() != null) {
+            citaExistente.setEstado(cita.getEstado());
+        }
+        if (cita.getDoctor() != null) {
+            citaExistente.setDoctor(cita.getDoctor());
+        }
+        if (cita.getEncargado() != null) {
+            citaExistente.setEncargado(cita.getEncargado());
+        }
+
+        return repository.save(citaExistente);
     }
 }
