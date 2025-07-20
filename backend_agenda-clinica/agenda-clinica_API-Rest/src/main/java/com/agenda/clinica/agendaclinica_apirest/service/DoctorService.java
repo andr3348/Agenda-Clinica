@@ -5,7 +5,6 @@ import com.agenda.clinica.agendaclinica_apirest.repository.DoctorRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +27,21 @@ public class DoctorService {
 
         doctorExistente.setNombre(doctor.getNombre());
         doctorExistente.setEspecialidad(doctor.getEspecialidad());
+
+        return repository.save(doctorExistente);
+    }
+
+    public Doctor patch(Integer id, Doctor doctor) {
+        Doctor doctorExistente = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Doctor no encontrado con el ID: "+id));
+
+        if (doctor.getNombre() != null) {
+            doctorExistente.setNombre(doctor.getNombre());
+        }
+        if (doctor.getEspecialidad() != null) {
+            doctorExistente.setEspecialidad(doctor.getEspecialidad());
+        }
 
         return repository.save(doctorExistente);
     }

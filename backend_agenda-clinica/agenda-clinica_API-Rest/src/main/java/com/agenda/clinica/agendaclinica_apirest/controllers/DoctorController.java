@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/doctores")
+@CrossOrigin(origins = "http://localhost:5173")
 public class DoctorController {
 
     private final DoctorService service;
@@ -40,6 +41,13 @@ public class DoctorController {
     @PutMapping("/{id}")
     public ResponseEntity<Doctor> update(@PathVariable Integer id, @RequestBody Doctor doctor) {
         Doctor doctorActualizado = service.update(id, doctor);
+        return ResponseEntity.ok(doctorActualizado);
+    }
+
+    // PATCH /api/doctores/{id}
+    @PatchMapping("/{id}")
+    public ResponseEntity<Doctor> patch(@PathVariable Integer id, @RequestBody Doctor doctor) {
+        Doctor doctorActualizado = service.patch(id, doctor);
         return ResponseEntity.ok(doctorActualizado);
     }
 
