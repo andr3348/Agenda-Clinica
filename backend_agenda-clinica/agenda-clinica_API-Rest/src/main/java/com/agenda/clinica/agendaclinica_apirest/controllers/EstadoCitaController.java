@@ -43,6 +43,13 @@ public class EstadoCitaController {
         return ResponseEntity.ok(estadoActualizado);
     }
 
+    // PATCH api/estadosCita/{id}
+    @PatchMapping("/{id}")
+    public ResponseEntity<EstadoCita> patch(@PathVariable Integer id, @RequestBody EstadoCita estadoCita) {
+        EstadoCita estadoActualizado = service.patch(id, estadoCita);
+        return ResponseEntity.ok(estadoActualizado);
+    }
+
     // DELETE /api/estadosCita/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {

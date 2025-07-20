@@ -24,10 +24,25 @@ public class EstadoCitaService {
     public EstadoCita update(Integer id, EstadoCita estadoCita) {
         EstadoCita estadoCitaExistente = repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,"Estado de cita no encontrada con el ID: "+id));
+                        HttpStatus.NOT_FOUND,"Estado de cita no encontrado con el ID: "+id));
 
         estadoCitaExistente.setNombreEstado(estadoCita.getNombreEstado());
         estadoCitaExistente.setColorHex(estadoCita.getColorHex());
+
+        return repository.save(estadoCitaExistente);
+    }
+
+    public EstadoCita patch(Integer id, EstadoCita estadoCita) {
+        EstadoCita estadoCitaExistente = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,"Estado de cita no encontrado con el ID: "+id));
+
+        if (estadoCitaExistente.getNombreEstado() != null) {
+            estadoCitaExistente.setNombreEstado(estadoCita.getNombreEstado());
+        }
+        if (estadoCitaExistente.getColorHex() != null) {
+            estadoCitaExistente.setColorHex(estadoCita.getColorHex());
+        }
 
         return repository.save(estadoCitaExistente);
     }
