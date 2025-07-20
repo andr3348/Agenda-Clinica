@@ -33,6 +33,23 @@ public class UsuarioService {
         return repository.save(usuarioExistente);
     }
 
+    public Usuario patch(Integer id, Usuario usuario) {
+        Usuario usuarioExistente = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,"Usuario no encontrado con el ID: "+id));
+        if (usuarioExistente.getNombre() != null) {
+            usuarioExistente.setNombre(usuario.getNombre());
+        }
+        if (usuarioExistente.getEmail() != null) {
+            usuarioExistente.setEmail(usuario.getEmail());
+        }
+        if (usuarioExistente.getRol() != null) {
+            usuarioExistente.setRol(usuario.getRol());
+        }
+
+        return repository.save(usuarioExistente);
+    }
+
     public void delete(Integer id) {
         if (!repository.existsById(id)) {
             throw new ResponseStatusException(
@@ -40,4 +57,8 @@ public class UsuarioService {
         }
         repository.deleteById(id);
     }
+
+    // CUSTOM QUERIES ---
+
+    public List<Usuario> getByRol(String rol) { return repository.getByRol(rol); }
 }

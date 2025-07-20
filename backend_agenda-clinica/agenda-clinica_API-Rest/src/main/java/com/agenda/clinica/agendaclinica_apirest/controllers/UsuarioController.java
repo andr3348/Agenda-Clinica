@@ -49,4 +49,13 @@ public class UsuarioController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    // CUSTOM QUERIES ---
+
+    // GET /api/usuarios/rol/{rol}
+    @GetMapping("/rol/{rol}")
+    public ResponseEntity<List<Usuario>> getByRol(@PathVariable String rol) {
+        List<Usuario> usuarios = service.getByRol(rol);
+        return ResponseEntity.ok(usuarios);
+    }
 }
