@@ -1,4 +1,4 @@
-const API_URL: string = import.meta.env.VITE_API_URL;
+export const API_URL: string = import.meta.env.VITE_API_URL;
 
 export interface Cita {
     idCita: number;
@@ -6,19 +6,26 @@ export interface Cita {
     fechaFin: string;
     motivo: string;
     paciente: {
+        idPaciente: number,
         nombre: string;
         telefono: string;
         email: string;
     };
     doctor: {
-        nombre: string;
+        idDoctor: number,
+        nombre: string,
+        especialidad?: string
     };
     estado: {
+        idEstado: number;
         nombreEstado: string;
         colorHex: string;
     };
     encargado?: {
-        nombre: string;
+        idUsuario: number,
+        nombre: string,
+        email: string,
+        rol: string
     };
     creadoEn: string;
 }

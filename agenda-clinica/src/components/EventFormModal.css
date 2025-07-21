@@ -57,3 +57,81 @@
 button {
   cursor: pointer;
 }
+
+.custom-modal__body form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Usar rem para espaciado */
+}
+
+.custom-modal__body form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.custom-modal__body form label {
+  font-weight: 600;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+.custom-modal__body form input[type="text"],
+.custom-modal__body form select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  background-color: #fdfdfd;
+}
+
+.custom-modal__body form input[type="text"]:focus,
+.custom-modal__body form select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Contenedor de los botones */
+.custom-modal__body form > div:last-of-type {
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.custom-modal__body form button {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.custom-modal__body form button[type="submit"] {
+  background-color: #28a745; /* Verde para guardar */
+  color: white;
+}
+
+.custom-modal__body form button[type="submit"]:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.custom-modal__body form button:not([type="submit"]) {
+  background-color: #6c757d; /* Gris para cerrar */
+  color: white;
+}
+
+.custom-modal__body form button:not([type="submit"]):hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}

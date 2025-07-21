@@ -1,6 +1,6 @@
 import './App.css'
 import { ScheduleXCalendar, useCalendarApp } from '@schedule-x/react'
-import {  createViewDay ,createViewWeek, createViewMonthGrid, type CalendarEventExternal } from '@schedule-x/calendar';
+import { createViewDay, createViewWeek, createViewMonthGrid, type CalendarEventExternal } from '@schedule-x/calendar';
 import '@schedule-x/theme-default/dist/calendar.css';
 import { createDragAndDropPlugin } from '@schedule-x/drag-and-drop';
 import { createResizePlugin } from '@schedule-x/resize';
@@ -56,25 +56,23 @@ function App() {
     }
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const citas: Cita[] = await getCitas();
+  const fetchData = async () => {
+    try {
+      const citas: Cita[] = await getCitas();
 
       const newEvents: CalendarEventExternal[] = citas.map((cita) => ({
         id: cita.idCita.toString(),
         title: `${cita.paciente.nombre} - ${cita.motivo}`,
         start: cita.fechaInicio.replace('T', ' ').slice(0, 16),
         end: cita.fechaFin.replace('T', ' ').slice(0, 16),
+        doctor: cita.doctor.nombre,
+        estado: cita.estado.nombreEstado,
+        encargado: cita.encargado ? cita.encargado.nombre : 'No asignado',
         description: `Doctor: ${cita.doctor.nombre}\nEstado: ${cita.estado.nombreEstado}\nEncargado: ${cita.encargado ? cita.encargado.nombre : 'No asignado'}`,
         color: cita.estado.colorHex,
         calendarId: cita.idCita.toString()
       }));
 
-      // Para depuración: verifica que los eventos se están creando correctamente
-      console.log('Eventos para cargar:', newEvents);
-
-      // El calendar.events.set() es el método correcto para actualizar los eventos.
       if (calendar) calendar.events.set(newEvents);
 
     } catch (error) {
@@ -84,27 +82,36 @@ function App() {
     }
   };
 
-  fetchData();
-}, [calendar]);
+  useEffect(() => {
+    fetchData();
+  }, [calendar]);
 
-if (loading) return <p>Cargando agenda...</p>;
+  // Esta función se ejecutará cuando el modal confirme una actualización.
+  const handleEventUpdate = () => {
+    setSelectedEvent(null); // Cierra el modal
+    fetchData(); // Vuelve a cargar los datos
+  };
 
-return (
-  <>
-    <div>
-      <ScheduleXCalendar
-        calendarApp={calendar}
-        customComponents={customComponents}
-      />
+  if (loading) return <p>Cargando agenda...</p>;
 
-      {selectedEvent && (
-        <EventFormModal
-          event={selectedEvent}
-          onClose={() => setSelectedEvent(null)} />
-      )}
-    </div>
-  </>
-)
+  return (
+    <>
+      <div>
+        <ScheduleXCalendar
+          calendarApp={calendar}
+          customComponents={customComponents}
+        />
+
+        {selectedEvent && (
+          <EventFormModal
+            event={selectedEvent}
+            onClose={() => setSelectedEvent(null)}
+            onUpdate={handleEventUpdate}
+          />
+        )}
+      </div>
+    </>
+  )
 }
 
 export default App
