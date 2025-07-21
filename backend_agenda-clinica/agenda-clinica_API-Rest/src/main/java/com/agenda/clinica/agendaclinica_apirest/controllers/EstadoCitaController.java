@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/estadosCita")
+@CrossOrigin(origins = "http://localhost:5173")
 public class EstadoCitaController {
 
     private final EstadoCitaService service;
