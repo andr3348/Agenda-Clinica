@@ -1,6 +1,6 @@
 import './App.css'
 import { ScheduleXCalendar, useCalendarApp } from '@schedule-x/react'
-import { createViewDay, createViewWeek, createViewMonthGrid, type CalendarEventExternal } from '@schedule-x/calendar';
+import { createViewDay, createViewWeek, type CalendarEventExternal } from '@schedule-x/calendar';
 import '@schedule-x/theme-default/dist/calendar.css';
 import { createDragAndDropPlugin } from '@schedule-x/drag-and-drop';
 import { createResizePlugin } from '@schedule-x/resize';
@@ -20,8 +20,7 @@ function App() {
   const calendar = useCalendarApp({
     views: [
       createViewDay(),
-      createViewWeek(),
-      createViewMonthGrid()
+      createViewWeek()
     ],
     // Los eventos se cargarán de forma asíncrona, por lo que empezamos con un array vacío.
     events: [],
@@ -52,6 +51,22 @@ function App() {
     callbacks: {
       onEventClick: (event) => {
         setSelectedEvent(event);
+      },
+      onClickDateTime: (dateTime) => {
+        // dateTime tiene el formato 'YYYY-MM-DDTHH:mm:ss.sssZ'
+        // Lo formateamos al formato que usa el calendario ('YYYY-MM-DD HH:mm')
+        const start = dateTime.replace('T', ' ').slice(0, 16);
+
+        // Creamos una fecha de fin por defecto (ej. 30 minutos después)
+        const end = new Date(new Date(dateTime).getTime() + 30 * 60 * 1000)
+          .toISOString()
+          .replace('T', ' ')
+          .slice(0, 16);
+
+        // Creamos un objeto de evento "borrador" para el modal
+        // Usamos un ID especial como 'new' para identificar que es un evento nuevo.
+        const newEvent: CalendarEventExternal = { id: 'new', start, end, title: '' };
+        setSelectedEvent(newEvent);
       }
     }
   });
