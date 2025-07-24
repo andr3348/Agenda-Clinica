@@ -119,7 +119,7 @@ export default function EventFormModal({ event, onClose, onUpdate }: Props) {
         doctorId: String(doctores.find(d => d.nombre === event.doctor)?.idDoctor || ''),
         estadoId: String(estados.find(e => e.nombreEstado === event.estado)?.idEstado || ''),
         encargadoId: String(encargados.find(u => u.nombre === event.encargado)?.idUsuario || ''),
-        pacinteId: String(pacientes.find(p => p.nombre === event.paciente))
+        pacinteId: String(pacientes.find(p => p.nombre === event.paciente)?.idPaciente || '')
       }));
     }
   }, [doctores, estados, encargados, pacientes, event]);
@@ -225,8 +225,8 @@ export default function EventFormModal({ event, onClose, onUpdate }: Props) {
               </select>
             </div>
 
-            <div>
-              <button onClick={onClose}>Cerrar</button>
+            <div className='custom-modal__form-actions'>
+              <button type='button' onClick={onClose}>Cerrar</button>
               <button type='submit'>Guardar</button>
             </div>
           </form>

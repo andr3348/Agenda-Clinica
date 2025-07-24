@@ -1,10 +1,11 @@
+/* --- Overlay y Contenedor del Modal --- */
 .custom-modal__overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,125 +14,137 @@
 
 .custom-modal__content {
   background: white;
-  padding: 20px;
+  padding: 24px;
   border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   width: 90%;
   max-width: 500px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh; /* Limita la altura del modal al 90% de la pantalla */
 }
 
+/* --- Encabezado del Modal --- */
 .custom-modal__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb; /* Un gris más suave */
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  flex-shrink: 0; /* Evita que el encabezado se encoja */
 }
 
 .custom-modal__header h2 {
   margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
 }
 
 .custom-modal__close-btn {
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   cursor: pointer;
+  line-height: 1;
+  color: #6b7280;
+  padding: 0.25rem;
 }
 
-.custom-modal__body pre {
-  white-space: pre-wrap; /* a diferencia del modal por defecto, esto respeta los saltos de línea */
-  background-color: #f5f5f5;
-  padding: 10px;
-  border-radius: 4px;
+.custom-modal__close-btn:hover {
+  color: #111827;
 }
 
-.custom-modal__footer {
-  border-top: 1px solid #eee;
-  padding-top: 10px;
-  margin-top: 20px;
-  text-align: right;
-}
-
-button {
-  cursor: pointer;
+/* --- Cuerpo del Modal y Formulario --- */
+.custom-modal__body {
+  overflow-y: auto; /* Habilita el scroll para formularios largos */
+  flex-grow: 1;
+  /* Añade un poco de padding para que la barra de scroll no se solape con el contenido */
+  padding-right: 1rem;
+  margin-right: -1rem;
 }
 
 .custom-modal__body form {
   display: flex;
   flex-direction: column;
-  gap: 1rem; /* Usar rem para espaciado */
+  gap: 1rem; /* Espaciado consistente entre grupos del formulario */
 }
 
 .custom-modal__body form > div {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 }
 
-.custom-modal__body form label {
-  font-weight: 600;
-  color: #444;
-  font-size: 0.9rem;
+.custom-modal__body label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #374151;
 }
 
-.custom-modal__body form input[type="text"],
-.custom-modal__body form select {
+.custom-modal__body input,
+.custom-modal__body select {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #d1d5db;
   border-radius: 6px;
-  box-sizing: border-box;
   font-size: 1rem;
-  background-color: #fdfdfd;
+  background-color: #f9fafb;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box; /* Importante para que el padding no afecte el width */
 }
 
-.custom-modal__body form input[type="text"]:focus,
-.custom-modal__body form select:focus {
+.custom-modal__body input:focus,
+.custom-modal__body select:focus {
   outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
-/* Contenedor de los botones */
-.custom-modal__body form > div:last-of-type {
-  flex-direction: row;
+/* --- Contenedor de Acciones del Formulario (Botones) --- */
+.custom-modal__form-actions {
+  /* Esta es la nueva clase que añadimos en el .tsx */
+  flex-direction: row; /* Sobrescribe el flex-direction: column por defecto */
+  display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #e5e7eb;
+  flex-shrink: 0; /* Evita que el pie de página se encoja */
 }
 
-.custom-modal__body form button {
-  padding: 0.75rem 1.25rem;
+.custom-modal__form-actions button {
+  padding: 0.6rem 1.2rem;
   border: none;
   border-radius: 6px;
-  font-weight: bold;
+  font-weight: 600;
+  cursor: pointer;
   font-size: 0.9rem;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: background-color 0.2s, box-shadow 0.2s;
 }
 
-.custom-modal__body form button[type="submit"] {
-  background-color: #28a745; /* Verde para guardar */
+/* Botón Primario (Guardar) */
+.custom-modal__form-actions button[type="submit"] {
+  background-color: #2563eb; /* Azul */
   color: white;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
-.custom-modal__body form button[type="submit"]:hover {
-  background-color: #218838;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+.custom-modal__form-actions button[type="submit"]:hover {
+  background-color: #1d4ed8;
 }
 
-.custom-modal__body form button:not([type="submit"]) {
-  background-color: #6c757d; /* Gris para cerrar */
-  color: white;
+/* Botón Secundario (Cerrar) */
+.custom-modal__form-actions button[type="button"] {
+  background-color: #f3f4f6; /* Gris claro */
+  color: #374151;
+  border: 1px solid #d1d5db;
 }
 
-.custom-modal__body form button:not([type="submit"]):hover {
-  background-color: #5a6268;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+.custom-modal__form-actions button[type="button"]:hover {
+  background-color: #e5e7eb;
 }
+
