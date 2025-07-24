@@ -33,6 +33,23 @@ public class PacienteService {
         return repository.save(pacienteExistente);
     }
 
+    public Paciente patch(Integer id, Paciente paciente) {
+        Paciente pacienteExistente = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,"Paciente no encontrado con el ID: "+id));
+        if (paciente.getNombre() != null) {
+            pacienteExistente.setNombre(paciente.getNombre());
+        }
+        if (paciente.getEmail() != null) {
+            pacienteExistente.setEmail(paciente.getEmail());
+        }
+        if (paciente.getTelefono() != null) {
+            pacienteExistente.setTelefono(paciente.getTelefono());
+        }
+
+        return  repository.save(pacienteExistente);
+    }
+
     public void delete(Integer id) {
         if (!repository.existsById(id)) {
             throw new ResponseStatusException(

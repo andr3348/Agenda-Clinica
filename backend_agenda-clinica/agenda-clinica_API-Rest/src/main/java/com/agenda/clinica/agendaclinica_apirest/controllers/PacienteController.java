@@ -44,6 +44,13 @@ public class PacienteController {
         return ResponseEntity.ok(pacienteActualizado);
     }
 
+    // PATCH /api/pacientes/{id}
+    @PatchMapping("/{id}")
+    public ResponseEntity<Paciente> patch(@PathVariable Integer id, @RequestBody Paciente paciente) {
+        Paciente pacienteActualizado = service.patch(id, paciente);
+        return  ResponseEntity.ok(pacienteActualizado);
+    }
+
     // DELETE /api/pacientes/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
