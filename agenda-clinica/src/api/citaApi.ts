@@ -55,3 +55,10 @@ export const updateCita = async (idCita: string, cita: Partial<Cita>): Promise<C
     if (!response.ok) throw new Error("Error al modificar la cita");
     return await response.json();
 }
+
+export const deleteCita = async (id: string): Promise<void> => {
+    const response = await fetch(`${API_URL}/citas/${id}`, {
+        method: "DELETE",
+    });
+    if (!response.ok) throw new Error("Error al eliminar la cita");
+}

@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { getCitas, type Cita } from './api/citaApi';
 import EventFormModal from './components/EventFormModal.tsx';
 import TimeGridEvent from './components/time-grid-event.tsx';
+import { BtnActionsMenu } from './components/ui/buttons/BtnActionsMenu.tsx';
 
 const customComponents = {
   timeGridEvent: TimeGridEvent,
@@ -111,7 +112,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div className='flex flex-row justify-center items-center gap-4'>
         <ScheduleXCalendar
           calendarApp={calendar}
           customComponents={customComponents}
@@ -124,6 +125,10 @@ function App() {
             onUpdate={handleEventUpdate}
           />
         )}
+
+        <div className='self-start'>
+          <BtnActionsMenu />
+        </div>
       </div>
     </>
   )

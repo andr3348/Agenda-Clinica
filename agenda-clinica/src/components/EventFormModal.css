@@ -148,3 +148,13 @@
   background-color: #e5e7eb;
 }
 
+/* Botón para eliminar Cita (Borrar) */
+.custom-modal__form-actions button[type="button"]:first-child {
+  background-color: hsl(360, 70%, 60%);
+  color: hsl(0, 100%, 100%);
+  border: 1px solid #d1d5db;
+}
+
+.custom-modal__form-actions button[type="button"]:first-child:hover {
+  background-color: hsl(360, 70%, 52%);
+}

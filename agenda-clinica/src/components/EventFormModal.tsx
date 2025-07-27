@@ -2,16 +2,16 @@ import { type CalendarEventExternal } from '@schedule-x/calendar'
 import './EventFormModal.css'
 import type React from 'react'
 import { Fragment, useEffect, useState } from 'react'
-import { saveCita, updateCita } from '../api/citaApi';
+import { deleteCita, saveCita, updateCita } from '../api/citaApi';
 import { getDoctores, type Doctor } from '../api/doctorApi';
 import { getEstadosCita, type EstadoCita } from '../api/estadoCitaApi';
-import { getByRol, type Usuario } from '../api/usuarioApi';
+import { getUsuarios, type Usuario } from '../api/usuarioApi';
 import { getPacientes, type Paciente } from '../api/pacienteApi';
 
 type Props = {
   event: CalendarEventExternal
   onClose: () => void
-  onUpdate: () => void;
+  onUpdate: () => void
 };
 
 export default function EventFormModal({ event, onClose, onUpdate }: Props) {
@@ -48,6 +48,11 @@ export default function EventFormModal({ event, onClose, onUpdate }: Props) {
     }));
   }
 
+  const handleEventDelete = async () => {
+    await deleteCita(formData.id.toString());
+    onUpdate();
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -57,14 +62,10 @@ export default function EventFormModal({ event, onClose, onUpdate }: Props) {
     const selectedEncargado = encargados.find(u => u.idUsuario === Number(formData.encargadoId));
     const selectedPaciente = pacientes.find(p => p.idPaciente === Number(formData.pacienteId));
 
-
-    // 2. Valida que los campos de selección necesarios estén seleccionados.
-
-
-    // 3. Formatea las fechas al formato esperado por la API (ISO 8601).
+    // 2. Formatea las fechas al formato esperado por la API (ISO 8601).
     const formatDateForAPI = (dateString: string) => dateString.replace(' ', 'T');
 
-    // 4. Construye el payload y decide si crear o actualizar.
+    // 3. Construye el payload y decide si crear o actualizar.
     const payload = {
       fechaInicio: formatDateForAPI(formData.start),
       fechaFin: formatDateForAPI(formData.end),
@@ -97,7 +98,7 @@ export default function EventFormModal({ event, onClose, onUpdate }: Props) {
           encargado: selectedEncargado
         });
       }
-      onUpdate(); // Actualiza el calendario
+      onUpdate(); // Avisa a App.tsx que se realizó un cambio
     } catch (error) {
       console.error("Falló la actualización de la cita:", error);
     }
@@ -133,7 +134,7 @@ export default function EventFormModal({ event, onClose, onUpdate }: Props) {
         const estados: EstadoCita[] = await getEstadosCita();
         setEstados(estados);
 
-        const encargados: Usuario[] = await getByRol("Recepcionista");
+        const encargados: Usuario[] = await getUsuarios();
         setEncargados(encargados);
 
         const pacientes: Paciente[] = await getPacientes();
@@ -226,7 +227,12 @@ export default function EventFormModal({ event, onClose, onUpdate }: Props) {
             </div>
 
             <div className='custom-modal__form-actions'>
-              <button type='button' onClick={onClose}>Cerrar</button>
+              {
+                event.id !== 'new' && (
+                  <button type="button" onClick={handleEventDelete}>Borrar</button>
+                )
+              }
+              <button type='button' onClick={onClose}>Cancelar</button>
               <button type='submit'>Guardar</button>
             </div>
           </form>
