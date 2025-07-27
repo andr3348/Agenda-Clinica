@@ -229,11 +229,29 @@ export default function EventFormModal({ event, onClose, onUpdate }: Props) {
             <div className='custom-modal__form-actions'>
               {
                 event.id !== 'new' && (
-                  <button type="button" onClick={handleEventDelete}>Borrar</button>
+                  <button type="button" onClick={handleEventDelete}
+                  className='bg-[hsl(0,50%,55%)] p-3 border-[1px] 
+                        border-[hsl(0,50%,70%)] rounded-[8px] cursor-pointer
+                        hover:bg-[hsl(0,50%,50%)] text-[#fff]
+                        font-semibold text-[.9rem] transition-all duration-200]'>
+                    Borrar
+                  </button>
                 )
               }
-              <button type='button' onClick={onClose}>Cancelar</button>
-              <button type='submit'>Guardar</button>
+              <button type='button' onClick={onClose}
+              className='bg-[hsl(0,0%,90%)] p-3 border-[1px] 
+                        border-[hsl(0,0%,80%)] rounded-[8px] cursor-pointer
+                        hover:bg-[hsl(0,0%,87%)] text-[hsl(0,0%,25%))]
+                        font-semibold text-[.9rem] transition-all duration-200'>
+                Cancelar
+              </button>
+              <button type='submit'
+              className='bg-[hsl(220,70%,52%)] p-3 border-[1px]
+                        border-[hsl(0,0%,80%)] rounded-[8px] cursor-pointer
+                        hover:bg-[hsl(220,70%,47%)] text-[#fff]
+                        font-semibold text-[.9rem] transition-all duration-200'>
+                Guardar
+              </button>
             </div>
           </form>
         </div>
