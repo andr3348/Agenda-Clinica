@@ -20,6 +20,8 @@ public class CitaService {
 
     public Optional<Cita> getById(Integer id) { return repository.findById(id); }
 
+    public List<Cita> getByDoctorId(Integer id) { return repository.getByDoctor(id); }
+
     public Cita save(Cita cita) { return repository.save(cita); }
 
     public Cita update(Integer id, Cita cita) {

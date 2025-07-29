@@ -30,6 +30,13 @@ public class CitaController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // GET /api/citas/doctor/{id}
+    @GetMapping("/doctor/{id}")
+    public ResponseEntity<List<Cita>> getByDoctorId(@PathVariable Integer id) {
+        List<Cita> citas = service.getByDoctorId(id);
+        return ResponseEntity.ok(citas);
+    }
+
     // POST /api/citas
     @PostMapping
     public ResponseEntity<Cita> create(@RequestBody Cita cita) {
