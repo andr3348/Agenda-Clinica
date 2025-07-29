@@ -24,19 +24,19 @@ export default function TimeGridEvent({ calendarEvent }: props) {
         return () => observer.disconnect();
     },[])
 
+    const reservadoStyles = 'bg-[hsl(30,80%,85%)] border-l-[6px] border-l-[hsl(30,100%,55%))] h-full';
+    const confirmadoStyles = 'bg-[hsl(110,80%,85%)] border-l-[6px] border-l-[hsl(110,100%,55%))] h-full';
+    const enAtencionStyles = 'bg-[hsl(230,80%,85%)] border-l-[6px] border-l-[hsl(230,100%,55%))] h-full';
+    const noContestaStyles = 'bg-[hsl(0,80%,85%)] border-l-[6px] border-l-[hsl(0,100%,55%))] h-full';
+    const unknownStateStyles = 'bg-[hsl(0,0%,85%)] border-l-[6px] border-l-[hsl(0,0%,55%))] h-full';
+
     return (
-    <div ref={ref} id='EventFrame' style={{ backgroundColor: calendarEvent.color,
-                width: '100%', height: '100%',
-                boxSizing: 'border-box',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                color: `white`,
-                fontSize: '12px',
-                fontWeight: '500',
-                lineHeight: '1.3',
-                textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
-    }}>
+    <div ref={ref} id='EventFrame' className={
+        calendarEvent.estado == 'Reservado' ? `${reservadoStyles} flex flex-col justify-center items-center` : 
+        calendarEvent.estado == 'Confirmado' ? `${confirmadoStyles} flex flex-col justify-center items-center` :
+        calendarEvent.estado == 'En atención' ? `${enAtencionStyles} flex flex-col justify-center items-center`:
+        calendarEvent.estado == 'No contesta' ? `${noContestaStyles} flex flex-col justify-center items-center` :
+        `${unknownStateStyles} flex flex-col justify-center items-center`}>
         <span>{calendarEvent.title}</span>
         {showTime && (
             <span>

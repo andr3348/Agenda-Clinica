@@ -5,10 +5,11 @@ import '@schedule-x/theme-default/dist/calendar.css';
 import { createDragAndDropPlugin } from '@schedule-x/drag-and-drop';
 import { createResizePlugin } from '@schedule-x/resize';
 import { useEffect, useState } from 'react';
-import { getCitas, type Cita } from './api/citaApi';
+import { getCitasByDoctorId, updateCita, type Cita } from './api/citaApi';
 import EventFormModal from './components/EventFormModal.tsx';
 import TimeGridEvent from './components/time-grid-event.tsx';
 import { BtnActionsMenu } from './components/ui/buttons/BtnActionsMenu.tsx';
+import { BtnFilter } from './components/ui/buttons/BtnFilter.tsx';
 
 const customComponents = {
   timeGridEvent: TimeGridEvent,
@@ -17,12 +18,14 @@ const customComponents = {
 function App() {
   const [loading, setLoading] = useState(true);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEventExternal | null>(null);
+  const [selectedDoctorId, setSelectedDoctorId] = useState<string>('');
 
   const calendar = useCalendarApp({
     views: [
       createViewDay(),
       createViewWeek()
     ],
+    defaultView: 'day',
     // Los eventos se cargarán de forma asíncrona, por lo que empezamos con un array vacío.
     events: [],
     selectedDate: new Date().toISOString().split('T')[0],
@@ -68,15 +71,39 @@ function App() {
         // Usamos un ID especial como 'new' para identificar que es un evento nuevo.
         const newEvent: CalendarEventExternal = { id: 'new', start, end, title: '' };
         setSelectedEvent(newEvent);
+      },
+      onEventUpdate: async (updatedEvent: CalendarEventExternal) => {
+        try {
+          const formatDateForAPI = (dateString: string) => dateString.replace(' ', 'T');
+
+          if (!updatedEvent.id) {
+            console.error("No se encontraron los datos originales de la cita.");
+            fetchData();
+            return;
+          }
+
+          await updateCita(updatedEvent.id.toString(), {
+            fechaInicio: formatDateForAPI(updatedEvent.start),
+            fechaFin: formatDateForAPI(updatedEvent.end),
+          });
+          console.log("Cita actualizada exitosamente.");
+
+        } catch (error) {
+          console.error("Error al actualizar la cita:", error);
+          fetchData();
+        }
       }
     }
   });
 
   const fetchData = async () => {
     try {
-      const citas: Cita[] = await getCitas();
+      if (!selectedDoctorId) return;
 
-      const newEvents: CalendarEventExternal[] = citas.map((cita) => ({
+      setLoading(true)
+      const allCitas: Cita[] = await getCitasByDoctorId(selectedDoctorId);
+
+      const newEvents: CalendarEventExternal[] = allCitas.map((cita) => ({
         id: cita.idCita.toString(),
         title: `${cita.paciente.nombre} - ${cita.motivo}`,
         start: cita.fechaInicio.replace('T', ' ').slice(0, 16),
@@ -100,7 +127,7 @@ function App() {
 
   useEffect(() => {
     fetchData();
-  }, [calendar]);
+  }, [calendar, selectedDoctorId]); // Agregamos selectedDoctorId como dependencia
 
   // Esta función se ejecutará cuando el modal confirme una actualización.
   const handleEventUpdate = () => {
@@ -108,11 +135,21 @@ function App() {
     fetchData(); // Vuelve a cargar los datos
   };
 
-  if (loading) return <p>Cargando agenda...</p>;
+  if (loading) return (
+    <div className='flex justify-center items-center h-screen'>
+      <p className='font-semibold'>
+        Cargando agenda...
+      </p>
+    </div>
+  )
 
   return (
     <>
-      <div className='flex flex-row justify-center items-center gap-4'>
+      <div className='flex flex-row justify-center items-center gap-4 h-full'>
+        <div className='self-start'>
+          <BtnFilter selectedDoctorId={selectedDoctorId} onDoctorChange={setSelectedDoctorId} />
+        </div>
+
         <ScheduleXCalendar
           calendarApp={calendar}
           customComponents={customComponents}

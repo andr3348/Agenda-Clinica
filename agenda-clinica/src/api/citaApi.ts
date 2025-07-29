@@ -36,6 +36,12 @@ export const getCitas = async (): Promise<Cita[]> => {
     return await response.json();
 };
 
+export const getCitasByDoctorId = async (id: string): Promise<Cita[]> => {
+    const response = await fetch(`${API_URL}/citas/doctor/${id}`);
+    if (!response.ok) throw new Error("Error al obtener las citas");
+    return await response.json();
+}
+
 export const saveCita = async (cita: Partial<Cita>): Promise<Cita> => {
     const response = await fetch(`${API_URL}/citas`, {
         method: "POST",
