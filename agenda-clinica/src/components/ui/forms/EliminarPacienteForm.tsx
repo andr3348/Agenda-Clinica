@@ -54,7 +54,7 @@ export const EliminarPacienteForm = ({ onClose }: Props) => {
             <div className='flex flex-col gap-4 bg-[hsl(0,0%,100%)] p-4 px-6
             rounded-[8px] w-sm'>
                 <div className='flex flex-row w-full justify-between items-center'>
-                    <h3 className='font-semibold'>Eliminar un Paciente</h3>
+                    <h3 className='font-semibold'>Eliminar un(a) Paciente</h3>
                     <button type='button' onClick={onClose}
                         className='font-bold text-2xl text-[hsl(0,0%,60%)]
                     hover:text-[hsl(0,0%,50%)] cursor-pointer'>
@@ -64,7 +64,7 @@ export const EliminarPacienteForm = ({ onClose }: Props) => {
                 <hr className='border-[hsl(0,0%,90%)]' />
                 <form action="" onSubmit={handleSubmit} className='flex flex-col gap-4'>
                     <div className='flex flex-col gap-2'>
-                        <label htmlFor="paciente" className='font-semibold text-[.8rem] text-[hsl(0,0%,40%))]'>Doctor(a):</label>
+                        <label htmlFor="paciente" className='font-semibold text-[.8rem] text-[hsl(0,0%,40%))]'>Paciente:</label>
                         <select name="paciente" id="paciente" onChange={changeFormData}
                             className='border-[1px] 
               border-[hsl(0,0%,80%)] rounded-[8px] bg-[hsl(0,0%,98%)]

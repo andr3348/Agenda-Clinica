@@ -124,7 +124,7 @@ export const PacienteFormModal = ({ onClose }: Props) => {
                         border-[hsl(0,0%,80%)] rounded-[8px] cursor-pointer
                         hover:bg-[hsl(0,0%,87%)] text-[hsl(0,0%,25%))] flex-1/2
                         font-semibold text-[.9rem] transition-all duration-200' >
-                Eliminar Encargado
+                Eliminar Paciente
               </button>
             </div>
             <button type='submit'
