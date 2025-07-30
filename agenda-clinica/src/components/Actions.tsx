@@ -4,8 +4,10 @@ import { DoctorFormModal } from "./ui/forms/DoctorFormModal";
 import { PacienteFormModal } from "./ui/forms/PacienteFormModal";
 import { EncargadoFormModal } from "./ui/forms/EncargadoFormModal";
 
-
-export const Actions = () => {
+type Props = {
+    onUpdate: () => void
+}
+export const Actions = ({ onUpdate }: Props) => {
     const [form, setForm] = useState({
         doctor: false,
         paciente: false,

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { savePaciente } from '../../../api/pacienteApi';
+import { EliminarPacienteForm } from './EliminarPacienteForm';
 
 type Props = {
   onClose: () => void
@@ -20,6 +21,11 @@ export const PacienteFormModal = ({ onClose }: Props) => {
   }
 
   const [successMessage, setSuccessMessage] = useState(false);
+
+  const [eliminarPacienteForm, setEliminarPacienteForm] = useState(false);
+      const toggleEliminarForm = () => {
+          setEliminarPacienteForm(!eliminarPacienteForm);
+      }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -105,13 +111,22 @@ export const PacienteFormModal = ({ onClose }: Props) => {
 
           <hr className='border-[hsl(0,0%,90%)]' />
           <div className='flex flex-col gap-3'>
-            <button type='button' onClick={onClose}
-              className='bg-[hsl(0,0%,90%)] p-3 border-[1px] 
+            <div className='flex flex-row gap-3'>
+              <button type='button' onClick={onClose}
+                className='bg-[hsl(0,0%,90%)] p-3 border-[1px] 
                         border-[hsl(0,0%,80%)] rounded-[8px] cursor-pointer
-                        hover:bg-[hsl(0,0%,87%)] text-[hsl(0,0%,25%))]
+                        hover:bg-[hsl(0,0%,87%)] text-[hsl(0,0%,25%))] flex-1/2
                         font-semibold text-[.9rem] transition-all duration-200' >
-              Cancelar
-            </button>
+                Cancelar
+              </button>
+              <button type='button' onClick={toggleEliminarForm}
+                className='bg-[hsl(0,0%,90%)] p-3 border-[1px] 
+                        border-[hsl(0,0%,80%)] rounded-[8px] cursor-pointer
+                        hover:bg-[hsl(0,0%,87%)] text-[hsl(0,0%,25%))] flex-1/2
+                        font-semibold text-[.9rem] transition-all duration-200' >
+                Eliminar Encargado
+              </button>
+            </div>
             <button type='submit'
               className='bg-[hsl(220,70%,52%)] p-3 border-[1px]
                         border-[hsl(0,0%,80%)] rounded-[8px] cursor-pointer
@@ -121,6 +136,11 @@ export const PacienteFormModal = ({ onClose }: Props) => {
             </button>
           </div>
         </form>
+        {
+          eliminarPacienteForm && (
+            <EliminarPacienteForm onClose={toggleEliminarForm} />
+          )
+        }
       </div>
     </div>
   )

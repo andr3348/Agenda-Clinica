@@ -164,7 +164,7 @@ function App() {
         )}
 
         <div className='self-start'>
-          <BtnActionsMenu />
+          <BtnActionsMenu onUpdate={fetchData} />
         </div>
       </div>
     </>

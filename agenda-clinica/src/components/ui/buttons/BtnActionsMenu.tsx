@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { Actions } from '../../Actions';
 
-export const BtnActionsMenu = () => {
+type Props = {
+    onUpdate: () => void
+}
+export const BtnActionsMenu = ({ onUpdate }: Props) => {
     const [iconToggle, setIconToggle] = useState(false);
 
     const handleClick = () => {
@@ -22,7 +25,7 @@ export const BtnActionsMenu = () => {
                 </button>
 
                 {
-                    iconToggle && (<Actions/>) || null
+                    iconToggle && (<Actions onUpdate={onUpdate} />) || null
                 }
             </div>
         </>

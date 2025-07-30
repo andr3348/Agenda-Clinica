@@ -32,3 +32,10 @@ export const updatePaciente = async (id: string, paciente: Partial<Paciente>): P
     if (!response.ok) throw new Error("Error al actualizar el paciente");
     return await response.json();
 }
+
+export const deletePaciente = async (id: string): Promise<void> => {
+    const response = await fetch(`${API_URL}/pacientes/${id}`, {
+        method: "DELETE"
+    });
+    if (!response.ok) throw new Error(`No se pudo eliminar el paciente con el id: ${id}`);
+}

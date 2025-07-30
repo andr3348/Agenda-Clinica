@@ -40,3 +40,10 @@ export const updateUsuario = async (id: string, usuario: Partial<Usuario>): Prom
     });
     return await response.json();
 }
+
+export const deleteUsuario = async (id: string): Promise<void> => {
+    const response = await fetch(`${API_URL}/usuarios/${id}`, {
+        method: "DELETE"
+    });
+    if (!response.ok) throw new Error(`No se pudo eliminar el usuario con el id: ${id}`);
+}
