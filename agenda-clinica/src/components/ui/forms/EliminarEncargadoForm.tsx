@@ -48,7 +48,7 @@ export const EliminarEncargadoForm = ({ onClose }: Props) => {
             <div className='flex flex-col gap-4 bg-[hsl(0,0%,100%)] p-4 px-6
             rounded-[8px] w-sm'>
                 <div className='flex flex-row w-full justify-between items-center'>
-                    <h3 className='font-semibold'>Eliminar un Encargado(a)</h3>
+                    <h3 className='font-semibold'>Eliminar un(a) Encargado(a)</h3>
                     <button type='button' onClick={onClose}
                         className='font-bold text-2xl text-[hsl(0,0%,60%)]
                     hover:text-[hsl(0,0%,50%)] cursor-pointer'>
