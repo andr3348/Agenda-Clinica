@@ -19,7 +19,7 @@ public class Cita {
     private Paciente paciente;
 
     @ManyToOne
-    @JoinColumn(name = "id_doctor", nullable = false)
+    @JoinColumn(name = "id_doctor", nullable = true)
     private Doctor doctor;
 
     @ManyToOne
@@ -27,7 +27,7 @@ public class Cita {
     private EstadoCita estado;
 
     @ManyToOne
-    @JoinColumn(name = "id_encargado")
+    @JoinColumn(name = "id_encargado", nullable = true)
     private Usuario encargado;
 
     private LocalDateTime creadoEn = LocalDateTime.now();
